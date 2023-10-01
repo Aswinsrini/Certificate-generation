@@ -1,17 +1,18 @@
 import React from "react";
 import list from "../assets/college_list.json";
-
+import { Link } from "react-router-dom";
 const HomePage = () => {
   const college = list["TN"].map((l, index) => (
     <option key={index}>{l}</option>
   ));
 
   return (
-    <div>
-      Are you Admin?<Link to="/admin">Login</Link>
-      <div className="p-6">
+    <div className="p-6">
+      <div>
         <b className="text-blue-600">Training Trains</b> Intern and Implant
-        Training program
+        Training program <br />
+        Are you Admin?
+        <Link to="/admin">Login here</Link>
       </div>
       <form className="mt-4" action="/submit" method="post">
         <div className="mb-4">
