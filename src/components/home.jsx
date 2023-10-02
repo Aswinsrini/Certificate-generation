@@ -1,10 +1,39 @@
-import React from "react";
+import { Link,useNavigate} from "react-router-dom";
 import list from "../assets/college_list.json";
+import { useState } from "react";
 
 const HomePage = () => {
+  const [formData, setFormData] = useState({
+    college:"ARIYALUR ENGINNERING COLLEGE",
+    intern:'Internship',
+    course:"Full Stack web developer",
+    duration:"1"
+  });
+  const navigate = useNavigate();
+
   const college = list["TN"].map((l, index) => (
     <option key={index}>{l}</option>
   ));
+    
+
+  const handleSubmit = (e) =>{
+    e.preventDefault();
+    console.log(formData);
+    navigate(
+      '/certificate',
+      {state:formData}
+    );
+  }
+
+  const handleInputChange = (event) => {
+    const { target } = event;
+    const { name, value } = target;
+
+    setFormData({
+      ...formData, 
+      [name]: value 
+    });
+  }
 
   return (
     <div>
@@ -13,7 +42,7 @@ const HomePage = () => {
         <b className="text-blue-600">Training Trains</b> Intern and Implant
         Training program
       </div>
-      <form className="mt-4" action="/submit" method="post">
+      <form onSubmit={handleSubmit} className="mt-4" action="/submit" method="post">
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700">
             Name
@@ -23,6 +52,7 @@ const HomePage = () => {
             name="name"
             id="name"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -35,6 +65,7 @@ const HomePage = () => {
             name="email"
             id="email"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -49,6 +80,7 @@ const HomePage = () => {
             name="number"
             id="number"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
             required
           />
         </div>
@@ -60,6 +92,7 @@ const HomePage = () => {
             name="college"
             id="college"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
             required
           >
             {college}
@@ -73,8 +106,10 @@ const HomePage = () => {
             name="intern"
             id="intern"
             className="border rounded-md p-2 w-full"
-          >
-            <option value="internship">Internship</option>
+            defaultValue={"Internship"}
+            onChange={handleInputChange}
+            >
+            <option value="internship" >Internship</option>
             <option value="implant">Implant</option>
           </select>
         </div>
@@ -86,8 +121,9 @@ const HomePage = () => {
             name="course"
             id="course"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
           >
-            <option value="full-stack">Full Stack web developer</option>
+            <option value="full-stack" >Full Stack web developer</option>
             <option value="mobile">Mobile app developer</option>
             <option value="cyber">Cyber Security</option>
           </select>
@@ -100,6 +136,7 @@ const HomePage = () => {
             name="duration"
             id="duration"
             className="border rounded-md p-2 w-full"
+            onChange={handleInputChange}
             required
           >
             <option value="1">1</option>
