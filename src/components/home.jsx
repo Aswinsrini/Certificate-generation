@@ -1,11 +1,17 @@
-import React from "react";
+import React, { useState } from "react";
 import list from "../assets/college_list.json";
 import { Link } from "react-router-dom";
+import AddDetails from "./userDetails";
 const HomePage = () => {
+  const [formdata, setFormdata] = useState({});
   const college = list["TN"].map((l, index) => (
     <option key={index}>{l}</option>
   ));
-
+  const handlechange = (e) => {
+    const { target } = e;
+    const { name, value } = target;
+    setFormdata({ ...formdata, [name]: value });
+  };
   return (
     <div className="p-6">
       <div>
@@ -14,7 +20,16 @@ const HomePage = () => {
         Are you Admin?
         <Link to="/admin">Login here</Link>
       </div>
-      <form className="mt-4" action="/submit" method="post">
+      <form
+        className="mt-4"
+        action="/"
+        method="post"
+        onSubmit={(e) => {
+          console.log(formdata);
+          e.preventDefault();
+          AddDetails(formdata);
+        }}
+      >
         <div className="mb-4">
           <label htmlFor="name" className="block text-gray-700">
             Name
@@ -24,6 +39,7 @@ const HomePage = () => {
             name="name"
             id="name"
             className="border rounded-md p-2 w-full"
+            onChange={handlechange}
             required
           />
         </div>
@@ -37,6 +53,7 @@ const HomePage = () => {
             id="email"
             className="border rounded-md p-2 w-full"
             required
+            onChange={handlechange}
           />
         </div>
         <div className="mb-4">
@@ -50,6 +67,7 @@ const HomePage = () => {
             name="number"
             id="number"
             className="border rounded-md p-2 w-full"
+            onChange={handlechange}
             required
           />
         </div>
@@ -62,7 +80,12 @@ const HomePage = () => {
             id="college"
             className="border rounded-md p-2 w-full"
             required
+            onChange={handlechange}
           >
+            <option disabled selected value>
+              {" "}
+              -- select an option --{" "}
+            </option>
             {college}
           </select>
         </div>
@@ -70,11 +93,18 @@ const HomePage = () => {
           <label htmlFor="intern" className="block text-gray-700">
             Type of program
           </label>
+
           <select
             name="intern"
             id="intern"
             className="border rounded-md p-2 w-full"
+            onChange={handlechange}
+            required
           >
+            <option disabled selected value>
+              {" "}
+              -- select an option --{" "}
+            </option>
             <option value="internship">Internship</option>
             <option value="implant">Implant</option>
           </select>
@@ -87,7 +117,12 @@ const HomePage = () => {
             name="course"
             id="course"
             className="border rounded-md p-2 w-full"
+            onChange={handlechange}
           >
+            <option disabled selected value>
+              {" "}
+              -- select an option --{" "}
+            </option>
             <option value="full-stack">Full Stack web developer</option>
             <option value="mobile">Mobile app developer</option>
             <option value="cyber">Cyber Security</option>
@@ -102,7 +137,12 @@ const HomePage = () => {
             id="duration"
             className="border rounded-md p-2 w-full"
             required
+            onChange={handlechange}
           >
+            <option disabled selected value>
+              {" "}
+              -- select an option --{" "}
+            </option>
             <option value="1">1</option>
             <option value="2">2</option>
             <option value="3">3</option>
