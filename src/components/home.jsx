@@ -1,150 +1,200 @@
-import {useState} from "react";
+import { useState } from "react";
 import list from "../assets/college_list.json";
-import { Link ,useNavigate} from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import AddDetails from "./userDetails";
+import { collection, addDoc } from "firebase/firestore";
+import {db} from '../firebase_setup/firebase';
+   
+    
+
 const HomePage = () => {
-  const [formData, setFormData] = useState({
-    college:"ARIYALUR ENGINNERING COLLEGE",
-    intern:'Internship',
-    course:"Full Stack web developer",
-    duration:"1"
-  });
+  const [formData, setFormData] = useState({});
   const navigate = useNavigate();
 
   const college = list["TN"].map((l, index) => (
     <option key={index}>{l}</option>
   ));
-    
 
-  const handleSubmit = (e) =>{
+  const handleSubmit = async(e) => {
     e.preventDefault();
     console.log(formData);
-    navigate(
-      '/certificate',
-      {state:formData}
-    );
-  }
-
+    try {
+        const docRef = await addDoc(collection(db, "user_details"), {
+          name: formData["name"],
+          email:formData["email"],
+          phone:formData["number"],
+          college:formData["college"],
+          intern:formData["intern"],
+          course:formData["course"],
+          duration:formData["duration"],
+        });
+        console.log("Document written with ID: ", docRef.id);
+      } catch (e) {
+        console.error("Error adding document: ", e);
+      }
+    // addUserDetails();
+    navigate("/certificate", { state: formData });
+  };
+  // const addUserDetails = async (e) => {
+  //   e.preventDefault();  
+   
+  //   }
   const handleInputChange = (event) => {
     const { target } = event;
     const { name, value } = target;
 
     setFormData({
-      ...formData, 
-      [name]: value 
+      ...formData,
+      [name]: value,
     });
-  }
+  };
 
   return (
-    <div>
-      Are you Admin?<Link to="/admin">Login</Link>
-      <div className="p-6">
-        <b className="text-blue-600">Training Trains</b> Intern and Implant
-        Training program
-      </div>
-      <form className="mt-4" action="/submit" method="post">
-        <div className="mb-4">
-          <label htmlFor="name" className="block text-gray-700">
-            Name
-          </label>
-          <input
-            type="text"
-            name="name"
-            id="name"
-            className="border rounded-md p-2 w-full"
-            required
-          />
+    <div className="flex flex-col items-center justify-center">
+      <div className="p-6 w-5/6">
+        <div className="flex flex-col items-end justify-center">
+          <p>Are you Admin?</p>
+          <Link to="/admin" className="mx-3">
+            Login here
+          </Link>
         </div>
-        <div className="mb-4">
-          <label htmlFor="email" className="block text-gray-700">
-            Email
-          </label>
-          <input
-            type="email"
-            name="email"
-            id="email"
-            className="border rounded-md p-2 w-full"
-            required
-          />
+        <div className="flex justify-center">
+          <b className="text-blue-600 text-center my-5 font-bold text-5xl underline  italic">
+            -Training Trains-
+          </b>
         </div>
-        <div className="mb-4">
-          <label htmlFor="number" className="block text-gray-700">
-            Phone number
-          </label>
-          <input
-            type="number"
-            minLength={10}
-            maxLength={10}
-            name="number"
-            id="number"
-            className="border rounded-md p-2 w-full"
-            required
-          />
+        <div>
+          <div className="flex items-center justify-center text-sky-600">
+            <p className="mx-12">Intern and Implant</p>
+            <p className="mx-12">Training program</p> <br />
+          </div>
         </div>
-        <div className="mb-4">
-          <label htmlFor="college" className="block text-gray-700">
-            Select your college
-          </label>
-          <select
-            name="college"
-            id="college"
-            className="border rounded-md p-2 w-full"
-            required
-          >
-            {college}
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="intern" className="block text-gray-700">
-            Type of program
-          </label>
-          <select
-            name="intern"
-            id="intern"
-            className="border rounded-md p-2 w-full"
-          >
-            <option value="internship">Internship</option>
-            <option value="implant">Implant</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="course" className="block text-gray-700">
-            Select the Course
-          </label>
-          <select
-            name="course"
-            id="course"
-            className="border rounded-md p-2 w-full"
-          >
-            <option value="full-stack">Full Stack web developer</option>
-            <option value="mobile">Mobile app developer</option>
-            <option value="cyber">Cyber Security</option>
-          </select>
-        </div>
-        <div className="mb-4">
-          <label htmlFor="duration" className="block text-gray-700">
-            Duration in months
-          </label>
-          <select
-            name="duration"
-            id="duration"
-            className="border rounded-md p-2 w-full"
-            required
-          >
-            <option value="1">1</option>
-            <option value="2">2</option>
-            <option value="3">3</option>
-            <option value="4">4</option>
-            <option value="5">5</option>
-            <option value="6">6</option>
-          </select>
-        </div>
-        <button
-          className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded"
-          type="submit"
+        <form
+          className="mt-4"
+          method="post"
+          onSubmit={handleSubmit} 
         >
-          Submit
-        </button>
-      </form>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="name" className="text-gray-900 text-xl">
+              Name
+            </label>
+            <input
+              type="text"
+              name="name"
+              id="name"
+              className="border border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              placeholder="Enter the Name"
+              required
+            />
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="email" className="text-gray-900 text-xl">
+              Email
+            </label>
+            <input
+              type="email"
+              name="email"
+              id="email"
+              placeholder="Enter the Email"
+              className="border border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="number" className="text-gray-900 text-xl">
+              Phone number
+            </label>
+            <input
+              type="number"
+              minLength={10}
+              maxLength={10}
+              name="number"
+              id="number"
+              placeholder="Enter the Phone Number"
+              className="border  border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            />
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="college" className="text-gray-900 text-xl">
+              Select your college
+            </label>
+            <select
+              name="college"
+              id="college"
+              className="border  border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">select the college</option>
+              {college}
+            </select>
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="intern" className="text-gray-900 text-xl">
+              Type of Program
+            </label>
+            <select
+              name="intern"
+              id="intern"
+              className="border  border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">select the program</option>
+              <option value="internship">Internship</option>
+              <option value="implant">Implant</option>
+            </select>
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="course" className="text-gray-900 text-xl">
+              Select the Course
+            </label>
+            <select
+              name="course"
+              id="course"
+              className="border  border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">select the course</option>
+              <option value="full-stack">Full Stack web developer</option>
+              <option value="mobile">Mobile app developer</option>
+              <option value="cyber">Cyber Security</option>
+            </select>
+          </div>
+          <div className="mb-4 flex items-center justify-between">
+            <label htmlFor="duration" className="text-gray-900 text-xl">
+              Duration in months
+            </label>
+            <select
+              name="duration"
+              id="duration"
+              className="border  border-solid border-black rounded-md p-2 mx-2 w-[75%]"
+              onChange={handleInputChange}
+              required
+            >
+              <option value="">select the duration</option>
+              <option value="1">1</option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+              <option value="6">6</option>
+            </select>
+          </div>
+          <div className="flex items-center justify-center">
+            <button
+              className="bg-blue-500 hover:bg-blue-600 text-white font-bold py-2 px-4 rounded text-lg"
+            >
+              Submit
+            </button>
+          </div>
+        </form>
+      </div>
     </div>
   );
 };

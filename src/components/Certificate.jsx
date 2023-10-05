@@ -6,7 +6,9 @@ import { useLocation } from "react-router-dom";
 // eslint-disable-next-line react/display-name
 const Certificate = React.forwardRef((props, ref) => {
     const location = useLocation();
-    const {name} = location.state;
+    if (location.state!=null){
+      const {name} = location.state;
+    }
   return (
     <div className="App" ref={ref}>
       <Icon />
