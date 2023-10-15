@@ -1,7 +1,7 @@
 import { useState } from "react";
 import list from "../assets/college_list.json";
 import { Link, useNavigate } from "react-router-dom";
-import AddDetails from "./userDetails";
+// import AddDetails from "./userDetails";
 import { collection, addDoc } from "firebase/firestore";
 import {db} from '../firebase_setup/firebase';
    
@@ -54,7 +54,7 @@ const HomePage = () => {
       <div className="p-6 w-5/6">
         <div className="flex flex-col items-end justify-center">
           <p>Are you Admin?</p>
-          <Link to="/admin" className="mx-3">
+          <Link to="/adminlogin" className="mx-3">
             Login here
           </Link>
         </div>

@@ -1,7 +1,7 @@
 import {Routes, Route } from "react-router-dom";
 import HomePage from "./components/home";
-import AdminPage from "./components/admin";
-import AdminLogin from "./components/adminLogin";
+import AdminPage from "./components/AdminPage";
+import AdminLogin from "./components/AdminLogin";
 import Certificate from "./components/Certificate";
 
 function App() {
