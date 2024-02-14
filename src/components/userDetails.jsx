@@ -4,8 +4,10 @@ import { db } from "../firebase_setup/firebase";
 const AddDetails = async (e) => {
   console.log("object");
   try {
+    e["value"] = ["accepted", "rejected"];
+    e["final"] = "";
     const docRef = await addDoc(collection(db, "users"), {
-      todo: e,
+      details: e,
     });
     console.log("Document written with ID: ", docRef.id);
   } catch (e) {
